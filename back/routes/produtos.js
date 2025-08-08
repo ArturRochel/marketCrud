@@ -1,37 +1,26 @@
-const { Router } = require("express");
+const { Router, request, response } = require("express");
 const Produto = require("../models/Produto.js");
 const routes = Router();
 
-let dbProdutos = [];
+// FAZER A ROTA PARA ADICIONAR PRODUTOS - POST
 
-routes.get("/", (request, response) => {
-  return response.status(200).json("API de Produtos está online!");
+// Rota para listar produtos
+routes.get("/", async (request, response) => {
+  try {
+    const produtos = await Produto.find({});
+
+    if (produtos.length === 0) {
+      return response.status(200).json({ message: "Lista de produtos vazia" });
+    } else {
+      return response.status(200).json(produtos);
+    }
+  } catch (error) {
+    console.log(`Erro listar produtos: ${error}`);
+    return response.status(500).json({ message: "Erro no servidor" });
+  }
 });
 
-routes.post("/", (request, response) => {
-  const { nome, precoCompra, precoVenda, descricao } = request.body;
-  const objetoData = new Date();
-  const data = objetoData.toLocaleDateString("pt-BR");
-  const hora = objetoData.toLocaleTimeString("pt-BR");
-
-  const novoProduto = {
-    id: dbProdutos.length ? dbProdutos[dbProdutos.length - 1].id + 1 : 1,
-    nome,
-    precoCompra,
-    precoVenda,
-    descricao,
-    dataAtualizacao: `${data} ${hora}`,
-  };
-
-  dbProdutos.push(novoProduto);
-
-  return response.status(201).json(novoProduto);
-});
-
-routes.get("/", (request, response) => {
-  return response.status(200).json(dbProdutos);
-});
-
+// Rota para buscar pelo nome
 routes.get("/busca", async (request, response) => {
   try {
     const { nome } = request.query;
@@ -51,45 +40,78 @@ routes.get("/busca", async (request, response) => {
   }
 });
 
-routes.put("/:id", (request, response) => {
-  const { nome, precoCompra, precoVenda, descricao } = request.body;
-  const id = request.params.id;
-  const indexProduto = dbProdutos.findIndex((produto) => produto.id == id);
-  const objetoData = new Date();
-  const data = objetoData.toLocaleDateString("pt-BR");
-  const hora = objetoData.toLocaleTimeString("pt-BR");
+// Rota para adicionar produtos
+routes.post("/", async (request, response) => {
+  try {
+    const { nome, precoCompra, precoVenda, descricao } = request.body;
+    const produtoCriado = await Produto.create({
+      nome,
+      precoCompra,
+      precoVenda,
+      descricao,
+    });
 
-  if (indexProduto !== -1) {
-    const atualizacao = {
-      ...dbProdutos[indexProduto],
-      id: Number(id),
-      nome: nome || dbProdutos[indexProduto].nome,
-      precoCompra: precoCompra || dbProdutos[indexProduto].precoCompra,
-      precoVenda: precoVenda || dbProdutos[indexProduto].precoVenda,
-      descricao: descricao || dbProdutos[indexProduto].descricao,
-      dataAtualizacao: `${data} ${hora}`,
-    };
-    dbProdutos[indexProduto] = atualizacao;
-    return response.status(200).json(atualizacao);
-  } else {
-    return response.status(404).json("Produto não encontrado!");
+    if (!produtoCriado === null) {
+      return response.status(201).json(produtoCriado);
+    } else {
+      return response.status(404).json({ message: "Erro ao criar o produto" });
+    }
+  } catch (error) {}
+});
+
+// Rota para atualizar produto
+routes.put("/editar/:nome", async (request, response) => {
+  try {
+    const nomeParaBuscas = request.params.nome;
+    const { nome, precoCompra, precoVenda, descricao } = request.body;
+
+    // findOneAndUpdate(parâmetro de busca, corpo)
+    const produtoEditado = await Produto.findOneAndUpdate(
+      {
+        nome: { $regex: "^" + nomeParaBuscas + "$", $options: "i" },
+      },
+      {
+        nome,
+        precoCompra,
+        precoVenda,
+        descricao,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (produtoEditado === null) {
+      return response
+        .status(404)
+        .json({ message: `${nomeParaBuscas} não encontrado` });
+    } else {
+      return response.status(200).json(produtoEditado);
+    }
+  } catch (error) {
+    console.log(`Erro na edição: ${error}`);
+    return response.status(500).json({ message: "erro no servidor" });
   }
 });
 
+// Rota para excluir produto
 routes.delete("/excluir", async (request, response) => {
   try {
     const { nome } = request.query;
-    const produtoExcluido = await Produto.find({
+    const produtoExcluido = await Produto.findOneAndDelete({
       nome: { $regex: "^" + nome + "$", $options: "i" },
     });
 
-    if (!produtoExcluido) {
-      return response.status(404).json({ message: "Produto não encontrado" });
+    if (produtoExcluido === null) {
+      return response.status(404).json({ message: `${nome} não encontrado!` });
     } else {
-      return response.status(201).json(produtoExcluido);
+      return response.status(200).json(produtoExcluido);
     }
   } catch (error) {
-    response.status(500).json({ message: "Erro na exclusão do produto" });
+    console.log(`Erro na deleção: ${error}`);
+    return response
+      .status(500)
+      .json({ message: "Ocorreu um erro no servidor" });
   }
 });
 
