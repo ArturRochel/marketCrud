@@ -2,8 +2,6 @@ const { Router, request, response } = require("express");
 const Produto = require("../models/Produto.js");
 const routes = Router();
 
-// FAZER A ROTA PARA ADICIONAR PRODUTOS - POST
-
 // Rota para listar produtos
 routes.get("/", async (request, response) => {
   try {
@@ -43,20 +41,20 @@ routes.get("/busca", async (request, response) => {
 // Rota para adicionar produtos
 routes.post("/", async (request, response) => {
   try {
-    const { nome, precoCompra, precoVenda, descricao } = request.body;
+    const { nome, precoCompra, precoVenda, descricao, estoque } = request.body;
     const produtoCriado = await Produto.create({
       nome,
       precoCompra,
       precoVenda,
       descricao,
+      estoque,
     });
 
-    if (!produtoCriado === null) {
-      return response.status(201).json(produtoCriado);
-    } else {
-      return response.status(404).json({ message: "Erro ao criar o produto" });
-    }
-  } catch (error) {}
+    return response.status(201).json(produtoCriado);
+  } catch (error) {
+    console.log(`Erro criação: ${error}`);
+    return response.status(500).json({ message: "Erro ao criar produto." });
+  }
 });
 
 // Rota para atualizar produto
@@ -95,15 +93,17 @@ routes.put("/editar/:nome", async (request, response) => {
 });
 
 // Rota para excluir produto
-routes.delete("/excluir", async (request, response) => {
+routes.delete("/excluir/:nome", async (request, response) => {
   try {
-    const { nome } = request.query;
+    const nomeParaDeletar = request.params.nome;
     const produtoExcluido = await Produto.findOneAndDelete({
-      nome: { $regex: "^" + nome + "$", $options: "i" },
+      nome: { $regex: "^" + nomeParaDeletar + "$", $options: "i" },
     });
 
     if (produtoExcluido === null) {
-      return response.status(404).json({ message: `${nome} não encontrado!` });
+      return response
+        .status(404)
+        .json({ message: `${nomeParaDeletar} não encontrado!` });
     } else {
       return response.status(200).json(produtoExcluido);
     }
