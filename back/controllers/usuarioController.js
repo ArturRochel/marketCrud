@@ -1,13 +1,16 @@
 const Usuario = require("../models/Usuario");
 
+// Rota para cadastrar usuário
 const cadastrarUsuario = async (request, response) => {
   try {
-    const { login, email, senha, telefone } = request.body;
+    const { login, email, telefone, senha, nome, sobrenome } = request.body;
     const usuarioCriado = await Usuario.create({
       login,
       email,
-      senha,
       telefone,
+      senha,
+      nome,
+      sobrenome,
     });
 
     return response.status(201).json(usuarioCriado);
@@ -35,4 +38,38 @@ const listarUsuarios = async (request, response) => {
       .status(500)
       .json({ message: "Erro na listagem de usuários" });
   }
+};
+
+// Rota para deletar usuario
+const deletarUsuario = async (request, response) => {
+  try {
+    const loginBuscado = request.params.login;
+    const usuarioDeletado = await Usuario.findOneAndDelete({
+      login: { $regex: "^" + loginBuscado + "$", $options: "i" },
+    });
+    if (usuarioDeletado !== null) {
+      return response.status(200).json(usuarioDeletado);
+    } else {
+      return response
+        .status(404)
+        .json({ message: `${loginBuscado} não encontrado` });
+    }
+  } catch (error) {
+    console.log(`ErroDeletarUsuario: ${error}`);
+    return response.status(500).json({ message: "Erro ao deletar usuário" });
+  }
+};
+
+// Rota para atualizar usuario - TERMINAR
+const atualizarUsuario = async (request, response) => {
+  try {
+    const loginBuscado = request.params.login;
+    const { login, email, telefone, senha, nome, sobrenome } = request.body;
+    const usuarioEditado = await Usuario.findOneAndUpdate(
+      {
+        login: { $regex: "^" + loginBuscado + "$", $options: "i" },
+      },
+      {}
+    );
+  } catch (error) {}
 };

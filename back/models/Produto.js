@@ -39,4 +39,8 @@ const estruturaProduto = new mongoose.Schema(
   }
 );
 
+estruturaProduto.virtual("lucroUnitario").get(function () {
+  return this.precoVenda - this.precoCompra;
+});
+
 module.exports = mongoose.model("Produto", estruturaProduto);

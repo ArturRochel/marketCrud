@@ -25,6 +25,17 @@ const estruturaUsuario = new mongoose.Schema(
       type: String,
       required: [true, "A senha é obrigatória."],
       trim: true,
+      minlength: [8, "A senha deve ter no mínimo 8 caracteres"],
+    },
+    nome: {
+      type: String,
+      required: [true, "O nome é obrigatório"],
+      trim: true,
+    },
+    sobrenome: {
+      type: String,
+      required: [true, "O sobrenome é obrigatório"],
+      trim: true,
     },
   },
   {
@@ -33,14 +44,22 @@ const estruturaUsuario = new mongoose.Schema(
   }
 );
 
-// Parte de criptografia - FAZENDO
+estruturaUsuario.virtual("nomeCompleto").get(function () {
+  return this.nome + " " + this.sobrenome;
+});
+// Estrutura de criptografia com bcrypt
 estruturaUsuario.pre("save", async function (next) {
-  if (this.isModified("senha")) {
-    console.log("senha modificada");
-  } else {
+  if (!this.isModified("senha")) {
     return next();
   }
-  next();
+
+  try {
+    const salt = await bcrypt.genSalt(10); // Gera um tempero para modificação da senha
+    this.senha = await bcrypt.hash(this.senha, salt); // Modifica a senha gerando um hash único
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = mongoose.model("Usuario", estruturaUsuario);
