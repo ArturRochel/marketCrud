@@ -64,12 +64,45 @@ const deletarUsuario = async (request, response) => {
 const atualizarUsuario = async (request, response) => {
   try {
     const loginBuscado = request.params.login;
-    const { login, email, telefone, senha, nome, sobrenome } = request.body;
-    const usuarioEditado = await Usuario.findOneAndUpdate(
+    const { login, telefone, email, senha, nome, sobrenome } = request.body;
+    const dados = {};
+    const permissoes = [
+      "login",
+      "telefone",
+      "email",
+      "senha",
+      "nome",
+      "sobrenome",
+    ];
+
+    permissoes.forEach((item) => {
+      const informacao = request.body[item];
+      if (informacao != undefined) {
+        dados.item = informacao;
+      }
+    });
+
+    const usuarioAtualizado = await Usuario.findOneAndUpdate(
       {
         login: { $regex: "^" + loginBuscado + "$", $options: "i" },
       },
-      {}
+      dados,
+      {
+        new: true,
+      }
     );
-  } catch (error) {}
+
+    if (usuarioAtualizado !== null) {
+      return response.status(200).json(usuarioAtualizado);
+    } else {
+      return response
+        .status(404)
+        .json({ message: `${loginBuscado} não encontrado` });
+    }
+  } catch (error) {
+    console.log(`ErroAtualizarUsuario: ${error}`);
+    return response
+      .status(500)
+      .json({ message: "Erro ao atualizar o usuário." });
+  }
 };
