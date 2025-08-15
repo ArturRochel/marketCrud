@@ -75,17 +75,23 @@ const deletarProduto = async (request, response) => {
 const atualizarProduto = async (request, response) => {
   try {
     const nomeBuscado = request.params.nome;
+    const permissoes = ["nome", "precoCompra", "precoVenda", "descricao"];
+    const dadosAtualizados = {};
+
+    permissoes.forEach((chave) => {
+      const valor = request.body[chave];
+
+      if (valor !== undefined) {
+        dadosAtualizados[chave] = valor;
+      }
+    });
+
     const { nome, precoCompra, precoVenda, descricao } = request.body;
     const produtoEditado = await Produto.findOneAndUpdate(
       {
         nome: { $regex: "^" + nomeBuscado + "$", $options: "i" },
       },
-      {
-        nome,
-        precoCompra,
-        precoVenda,
-        descricao,
-      },
+      dadosAtualizados,
       {
         new: true,
       }

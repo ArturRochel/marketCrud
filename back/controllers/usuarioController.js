@@ -1,6 +1,37 @@
+require("dotenv").config();
 const Usuario = require("../models/Usuario");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
-// Rota para cadastrar usuário
+// Função de login
+const logar = async (request, response) => {
+  const { login, senha } = request.body;
+  const buscarLogin = await Usuario.findOne({
+    login: { $regex: "^" + login + "$", $options: "i" },
+  });
+
+  if (buscarLogin !== null) {
+    const senhaHash = buscarLogin.senha;
+    const comparacao = await bcrypt.compare(senha, senhaHash);
+    if (comparacao) {
+      const chave = process.env.JWT_SECRET;
+      const token = jwt.sign({ id: buscarLogin._id }, chave, {
+        expiresIn: "2h",
+      });
+      return response.status(200).json(token);
+    } else {
+      return response
+        .status(401)
+        .json({ message: "Não foi possível efetuar o login" });
+    }
+  } else {
+    return response
+      .status(401)
+      .json({ message: "Não foi possível efetuar o login" });
+  }
+};
+
+// Função para cadastrar usuário
 const cadastrarUsuario = async (request, response) => {
   try {
     const { login, email, telefone, senha, nome, sobrenome } = request.body;
@@ -40,7 +71,7 @@ const listarUsuarios = async (request, response) => {
   }
 };
 
-// Rota para deletar usuario
+// Função para deletar usuario
 const deletarUsuario = async (request, response) => {
   try {
     const loginBuscado = request.params.login;
@@ -60,12 +91,10 @@ const deletarUsuario = async (request, response) => {
   }
 };
 
-// Rota para atualizar usuario - TERMINAR
+// Função para atualizar usuario
 const atualizarUsuario = async (request, response) => {
   try {
     const loginBuscado = request.params.login;
-    const { login, telefone, email, senha, nome, sobrenome } = request.body;
-    const dados = {};
     const permissoes = [
       "login",
       "telefone",
@@ -74,11 +103,12 @@ const atualizarUsuario = async (request, response) => {
       "nome",
       "sobrenome",
     ];
+    const dadosAtualizados = {};
 
-    permissoes.forEach((item) => {
-      const informacao = request.body[item];
-      if (informacao != undefined) {
-        dados.item = informacao;
+    permissoes.forEach((chave) => {
+      const valor = request.body[chave];
+      if (valor !== undefined) {
+        dadosAtualizados[chave] = valor;
       }
     });
 
@@ -86,13 +116,10 @@ const atualizarUsuario = async (request, response) => {
       {
         login: { $regex: "^" + loginBuscado + "$", $options: "i" },
       },
-      dados,
-      {
-        new: true,
-      }
+      dadosAtualizados,
+      { new: true }
     );
-
-    if (usuarioAtualizado !== null) {
+    if (usuarioAtualizado != null) {
       return response.status(200).json(usuarioAtualizado);
     } else {
       return response
@@ -103,6 +130,6 @@ const atualizarUsuario = async (request, response) => {
     console.log(`ErroAtualizarUsuario: ${error}`);
     return response
       .status(500)
-      .json({ message: "Erro ao atualizar o usuário." });
+      .json({ message: "Erro ao atualizar o usuario" });
   }
 };
