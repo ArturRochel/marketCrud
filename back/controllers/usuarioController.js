@@ -5,29 +5,36 @@ const jwt = require("jsonwebtoken");
 
 // Função de login
 const logar = async (request, response) => {
-  const { login, senha } = request.body;
-  const buscarLogin = await Usuario.findOne({
-    login: { $regex: "^" + login + "$", $options: "i" },
-  });
+  try {
+    const { login, senha } = request.body;
+    const loginBuscado = await Usuario.findOne({
+      login: { $regex: "^" + login + "$", $options: "i" },
+    });
 
-  if (buscarLogin !== null) {
-    const senhaHash = buscarLogin.senha;
-    const comparacao = await bcrypt.compare(senha, senhaHash);
-    if (comparacao) {
-      const chave = process.env.JWT_SECRET;
-      const token = jwt.sign({ id: buscarLogin._id }, chave, {
-        expiresIn: "2h",
-      });
-      return response.status(200).json(token);
+    if (loginBuscado !== null) {
+      const senhaHash = loginBuscado.senha;
+      const comparacao = await bcrypt.compare(senha, senhaHash);
+
+      if (comparacao) {
+        const chaveAPI = process.env.JWT_SECRET;
+        const token = jwt.sign({ id: loginBuscado._id }, chaveAPI, {
+          expiresIn: "2h",
+        });
+
+        return response.status(200).json(token);
+      } else {
+        return response
+          .status(401)
+          .json({ message: "Não foi possível efetuar o login" });
+      }
     } else {
       return response
         .status(401)
         .json({ message: "Não foi possível efetuar o login" });
     }
-  } else {
-    return response
-      .status(401)
-      .json({ message: "Não foi possível efetuar o login" });
+  } catch (error) {
+    console.log(`ErroLogin: ${error}`);
+    return response.status(500).json({ message: "Erro ao executar o login" });
   }
 };
 
@@ -133,3 +140,13 @@ const atualizarUsuario = async (request, response) => {
       .json({ message: "Erro ao atualizar o usuario" });
   }
 };
+
+const usuarioController = {
+  logar,
+  cadastrarUsuario,
+  listarUsuarios,
+  deletarUsuario,
+  atualizarUsuario,
+};
+
+module.exports = usuarioController;

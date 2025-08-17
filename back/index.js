@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const routes = require("./routes/produtos.js");
+const routesProdutos = require("./routes/produtos.js");
+const routesUsuarios = require("./routes/usuarios.js");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -25,4 +26,5 @@ mongoose
     process.exit(1);
   });
 
-app.use("/api/produtos", routes);
+app.use("/api/produtos", routesProdutos);
+app.use("/api/usuarios", routesUsuarios);
