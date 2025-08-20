@@ -1,17 +1,19 @@
 // Em pages/LoginPage.jsx
 
 import React from "react";
+import LoginImage from "../assets/testeLogin.png";
 
 const LoginPage = () => {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-around bg-gray-100 dark:bg-gray-900">
-      <div className="rounded-2xl border border-white/20 bg-white/80 p-8 text-center shadow-xl backdrop-blur-sm">
-        <div className="mb-4 flex justify-center">
+    <div className="flex min-h-screen flex-col items-center justify-evenly bg-gray-100 dark:bg-gray-900">
+      {/* Boas vindas */}
+      <div className="w-full max-w-xs rounded-2xl border border-white/20 bg-white/80 p-6 text-center shadow-xl backdrop-blur-sm">
+        {/* <div className="mb-2 flex justify-center">
           <div className="relative">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
             <div className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br from-pink-400 to-red-400"></div>
           </div>
-        </div>
+        </div> */}
         <h1 className="mb-2 text-2xl font-bold text-gray-800">
           Bem-vindo ao MarketCrud!
         </h1>
@@ -21,6 +23,14 @@ const LoginPage = () => {
       </div>
 
       <div className="w-full max-w-sm rounded-lg bg-white p-8 shadow-md dark:bg-gray-800">
+        <div className="mb-8 text-center">
+          <h2 className="mb-2 text-xl font-semibold text-white">
+            Faça seu login
+          </h2>
+          <p className="text-gray-800 dark:text-gray-400">
+            Acesse sua conta para continuar
+          </p>
+        </div>
         <form className="flex flex-col gap-4">
           <div>
             <label
