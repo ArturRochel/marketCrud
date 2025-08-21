@@ -21,7 +21,12 @@ const logar = async (request, response) => {
           expiresIn: "2h",
         });
 
-        return response.status(200).json(token);
+        const usuario = loginBuscado.toJSON();
+
+        delete usuario.senha;
+        delete usuario.__v;
+
+        return response.status(200).json({ token, usuario });
       } else {
         return response
           .status(401)

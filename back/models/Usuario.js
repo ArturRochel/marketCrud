@@ -41,6 +41,8 @@ const estruturaUsuario = new mongoose.Schema(
   {
     timestamps: true,
     collection: "usuarios",
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 

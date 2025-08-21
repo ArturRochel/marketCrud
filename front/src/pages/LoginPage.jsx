@@ -1,11 +1,21 @@
-// Em pages/LoginPage.jsx
-
-import React from "react";
 import LoginImage from "../assets/testeLogin.png";
+import LogoArtur from "../assets/arturDev-logo.png";
+import { useForm } from "react-hook-form";
+import { loginUser } from "../services/authService";
+import useUserStore from "../stores/useUserStore";
 
 const LoginPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
   return (
-    <div className="flex min-h-screen flex-col items-center justify-evenly bg-gray-100 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col items-center justify-evenly bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800">
       {/* Boas vindas */}
       <div className="w-full max-w-xs rounded-2xl border border-white/20 bg-white/80 p-6 text-center shadow-xl backdrop-blur-sm">
         {/* <div className="mb-2 flex justify-center">
@@ -15,7 +25,10 @@ const LoginPage = () => {
           </div>
         </div> */}
         <h1 className="mb-2 text-2xl font-bold text-gray-800">
-          Bem-vindo ao MarketCrud!
+          Bem-vindo ao{" "}
+          <span className="mb-6 text-3xl font-bold text-blue-600">
+            MarketCrud
+          </span>
         </h1>
         <p className="leading-relaxed text-gray-600">
           Plataforma de gerenciamento e organização para mercados e comércios.
@@ -31,7 +44,7 @@ const LoginPage = () => {
             Acesse sua conta para continuar
           </p>
         </div>
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label
               htmlFor="login"
@@ -40,11 +53,19 @@ const LoginPage = () => {
               Login
             </label>
             <input
+              {...register("login", {
+                required: "O campo de login é obrigatório",
+              })}
               type="text"
               name="login"
               placeholder="Digite o seu login"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             />
+            {errors.login && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.login.message}
+              </p>
+            )}
           </div>
           <div>
             <label
@@ -54,12 +75,24 @@ const LoginPage = () => {
               Senha
             </label>
             <input
+              {...register("senha", {
+                required: "A senha é obrigatória",
+                minLength: {
+                  value: 8,
+                  message: "A senha precisa ter no mínimo 8 caracteres",
+                },
+              })}
               type="password"
               name="senha"
               id="senha"
               placeholder="Digite a sua senha"
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
             />
+            {errors.senha && (
+              <p className="mt-1 text-xs text-red-500">
+                {errors.senha.message}
+              </p>
+            )}
           </div>
           <a
             href="/"
@@ -76,10 +109,22 @@ const LoginPage = () => {
         </form>
       </div>
 
-      <div className="text-center">
-        <p className="text-sm font-medium text-red-600">
-          Sistema desenvolvido por: Artur Rochel
+      <div className="flex w-full max-w-70 flex-col gap-1 rounded-2xl border border-slate-700 bg-slate-800 p-4 text-center shadow-2xl">
+        <p className="mt-1 mb-2 text-xs text-gray-500 dark:text-gray-400">
+          Sistema desenvolvido por:
         </p>
+
+        <a
+          href="https://br.linkedin.com/in/artur-rochel-950361184"
+          className="w-full max-w-xs justify-center justify-self-center align-middle"
+        >
+          <img
+            src={LogoArtur}
+            alt="Logo Artur.Dev"
+            className="w-full max-w-40 justify-self-center"
+          />
+        </a>
+
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
           Todos os direitos reservados MarketCrud.ltda
         </p>
