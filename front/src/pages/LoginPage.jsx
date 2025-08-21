@@ -1,4 +1,4 @@
-import LoginImage from "../assets/testeLogin.png";
+import { useNavigate } from "react-router-dom";
 import LogoArtur from "../assets/arturDev-logo.png";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../services/authService";
@@ -10,12 +10,22 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+  const setUser = useUserStore((state) => state.setUser);
 
   const onSubmit = async (data) => {
-    console.log(data);
+    try {
+      const responseData = await loginUser(data);
+      console.log(`Login bem-sucedido: ${responseData}`);
+      setUser(responseData);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error(`Erro no login: ${error}`);
+      throw error;
+    }
   };
   return (
-    <div className="flex min-h-screen flex-col items-center justify-evenly bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800">
+    <div className="flex flex-col items-center gap-8 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800 py-16">
       {/* Boas vindas */}
       <div className="w-full max-w-xs rounded-2xl border border-white/20 bg-white/80 p-6 text-center shadow-xl backdrop-blur-sm">
         {/* <div className="mb-2 flex justify-center">
