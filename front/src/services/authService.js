@@ -19,6 +19,16 @@ export const loginUser = async (data) => {
   }
 };
 
+export const registerUser = async (data) => {
+  try {
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(`Erro cadastrar usuario: ${error}`);
+    throw error;
+  }
+};
+
 // AuthService é a função que vai realizar o login de fato, ela vai até a API levando as informações de login e senha
 // A api irá até o banco de dados verificar se as credenciais são válidas, se forem válidas o JWT irá gerar um token para esse usuário
 // A partir desse retorno nós vamos ter o token e os dados do usuários
