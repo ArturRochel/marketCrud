@@ -16,7 +16,7 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       const responseData = await loginUser(data);
-      console.log(`Login bem-sucedido: ${responseData}`);
+      console.log(`Login bem-sucedido: ${JSON.stringify(responseData)}`);
       setUser(responseData);
       navigate("/dashboard");
     } catch (error) {

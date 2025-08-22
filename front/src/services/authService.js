@@ -2,7 +2,7 @@ import api from "./api";
 
 export const loginUser = async (data) => {
   try {
-    const response = await api.post("/login", data);
+    const response = await api.post("/auth/login", data);
     console.log(response.data);
     return response.data;
   } catch (error) {
