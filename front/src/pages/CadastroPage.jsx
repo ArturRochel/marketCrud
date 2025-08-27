@@ -32,9 +32,12 @@ const CadastroPage = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900 p-4">
       <div className="w-full max-w-md space-y-6">
-        <div className="rounded-2xl bg-gray-200 p-8 text-center shadow-lg">
-          <h1 className="mb-2 text-2xl font-semibold text-gray-800">
-            Bem-vindo ao <span className="text-blue-600">MarketCrud</span>
+        <div className="w-full max-w-xs justify-self-center rounded-2xl bg-gray-200 p-4 text-center shadow-lg">
+          <h1 className="mb-2 text-2xl font-bold text-gray-800">
+            Bem-vindo ao{" "}
+            <span className="mb-6 text-3xl font-bold text-blue-600">
+              MarketCrud
+            </span>
           </h1>
           <p className="text-sm leading-relaxed text-gray-600">
             Plataforma de gerenciamento e organização para mercados e comércios.

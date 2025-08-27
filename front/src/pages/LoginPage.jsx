@@ -31,7 +31,7 @@ const LoginPage = () => {
   return (
     <div className="flex flex-col items-center gap-8 bg-gradient-to-br from-slate-900 via-blue-950 to-slate-800 py-16">
       {/* Boas vindas */}
-      <div className="w-full max-w-xs rounded-2xl border border-white/20 bg-white/80 p-6 text-center shadow-xl backdrop-blur-sm">
+      <div className="w-full max-w-xs justify-self-center rounded-2xl border border-white/20 bg-gray-200 p-4 text-center shadow-xl backdrop-blur-sm">
         {/* <div className="mb-2 flex justify-center">
           <div className="relative">
             <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
