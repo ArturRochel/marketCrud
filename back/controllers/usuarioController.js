@@ -47,16 +47,29 @@ const logar = async (request, response) => {
 const cadastrarUsuario = async (request, response) => {
   try {
     const { login, email, telefone, senha, nome, sobrenome } = request.body;
-    const usuarioCriado = await Usuario.create({
-      login,
-      email,
-      telefone,
-      senha,
-      nome,
-      sobrenome,
+    const usuarioExistente = await Usuario.findOne({
+      $or: [
+        { login: { $regex: `^${login}$`, $options: "i" } },
+        { email: { $regex: `^${email}$`, $options: "i" } },
+      ],
     });
 
-    return response.status(201).json(usuarioCriado);
+    if (usuarioExistente === null) {
+      const usuarioCriado = await Usuario.create({
+        login,
+        email,
+        telefone,
+        senha,
+        nome,
+        sobrenome,
+      });
+
+      const usuarioObj = usuarioCriado.toJSON();
+      delete usuarioObj.senha;
+      return response.status(201).json(usuarioObj);
+    } else {
+      return response.status(409).json({ message: "Usuário já cadastrado" });
+    }
   } catch (error) {
     console.log(`ErroCriarUsuario: ${error}`);
     return response.status(500).json({ message: "Erro ao criar usuário" });

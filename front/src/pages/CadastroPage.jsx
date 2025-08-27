@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const CadastroPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,14 +12,17 @@ const CadastroPage = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const response = await registerUser(data);
-      console.log(response);
+      const responseData = await registerUser(data);
+      console.log(responseData);
     } catch (error) {
+      toast.error(error.message);
+      reset();
       console.error(`Erro no cadastro de usuário: ${error}`);
       throw error;
     } finally {
@@ -37,8 +41,8 @@ const CadastroPage = () => {
           </p>
         </div>
 
-        <div className="rounded-2xl border border-slate-700 bg-slate-800 p-8 shadow-xl">
-          <div className="mb-6 text-center">
+        <div className="rounded-2xl border border-slate-700 bg-slate-800 p-6 shadow-xl">
+          <div className="mb-4 text-center">
             <h2 className="mb-2 text-xl font-medium text-white">
               Cadastrar Usuário
             </h2>
@@ -47,10 +51,10 @@ const CadastroPage = () => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-2 block text-sm font-medium text-white">
+                <label className="font-meidum mb-1 block text-xs text-white">
                   Nome
                 </label>
                 <input

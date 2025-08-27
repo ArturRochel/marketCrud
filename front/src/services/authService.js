@@ -21,11 +21,19 @@ export const loginUser = async (data) => {
 
 export const registerUser = async (data) => {
   try {
-    console.log(data);
-    return data;
+    const response = await api.post("/usuarios", data);
+    return response.data;
   } catch (error) {
-    console.error(`Erro cadastrar usuario: ${error}`);
-    throw error;
+    let errorMessage = "Ocorreu um erro inesperado. Tente novamente";
+
+    // Esse caso será executado para verificar se houve conexão como back-end, se houve, vai ser exibido a mensagem de erro do response
+    if (error.response) {
+      errorMessage = error.response.data.message || "Erro ao cadastrar usuário";
+    } else if (error.request) {
+      errorMessage = "Não foi possível conectar ao servidor de cadastro";
+    }
+
+    throw new Error(errorMessage);
   }
 };
 

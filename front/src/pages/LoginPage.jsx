@@ -3,12 +3,14 @@ import LogoArtur from "../assets/arturDev-logo.png";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../services/authService";
 import useUserStore from "../stores/useUserStore";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
@@ -20,7 +22,9 @@ const LoginPage = () => {
       setUser(responseData);
       navigate("/dashboard");
     } catch (error) {
-      console.error(`Erro no login: ${error}`);
+      toast.error(error.message);
+      reset();
+      console.error(`${error}`);
       throw error;
     }
   };
