@@ -3,6 +3,9 @@ import LoginPage from "./pages/LoginPage";
 import DashboardLayout from "./pages/DashboardLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import CadastroPage from "./pages/CadastroPage";
+import ProdutosPage from "./pages/ProdutosPage";
+import PerfilPage from "./pages/PerfilPage";
+import IntroDashPage from "./pages/IntroDashPage";
 import { Toaster } from "react-hot-toast";
 
 function App() {
@@ -19,7 +22,11 @@ function App() {
               <DashboardLayout />
             </PrivateRoute>
           }
-        />
+        >
+          <Route index element={<IntroDashPage />} />
+          <Route path="produtos" element={<ProdutosPage />} />
+          <Route path="perfil" element={<PerfilPage />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

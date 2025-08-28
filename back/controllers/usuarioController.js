@@ -128,6 +128,17 @@ const deletarUsuario = async (request, response) => {
 const atualizarUsuario = async (request, response) => {
   try {
     const loginBuscado = request.params.login;
+
+    const usuario = await Usuario.findOne({
+      login: { $regex: `^${loginBuscado}$`, $options: `i` },
+    });
+
+    if (!usuario) {
+      return response
+        .status(404)
+        .json({ message: `${loginBuscado} não encontrado` });
+    }
+
     const permissoes = [
       "login",
       "telefone",
@@ -136,29 +147,21 @@ const atualizarUsuario = async (request, response) => {
       "nome",
       "sobrenome",
     ];
-    const dadosAtualizados = {};
 
     permissoes.forEach((chave) => {
       const valor = request.body[chave];
       if (valor !== undefined) {
-        dadosAtualizados[chave] = valor;
+        usuario[chave] = valor;
       }
     });
 
-    const usuarioAtualizado = await Usuario.findOneAndUpdate(
-      {
-        login: { $regex: "^" + loginBuscado + "$", $options: "i" },
-      },
-      dadosAtualizados,
-      { new: true }
-    );
-    if (usuarioAtualizado != null) {
-      return response.status(200).json(usuarioAtualizado);
-    } else {
-      return response
-        .status(404)
-        .json({ message: `${loginBuscado} não encontrado` });
-    }
+    const usuarioAtualizado = await usuario.save();
+
+    const usuarioObj = usuarioAtualizado.toJSON();
+    delete usuarioObj.senha;
+    delete usuarioObj.__v;
+
+    return response.status(200).json(usuarioObj);
   } catch (error) {
     console.log(`ErroAtualizarUsuario: ${error}`);
     return response

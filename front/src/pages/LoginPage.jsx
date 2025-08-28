@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LogoArtur from "../assets/arturDev-logo.png";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../services/authService";
@@ -108,12 +108,20 @@ const LoginPage = () => {
               </p>
             )}
           </div>
-          <a
-            href="/"
-            className="self-end text-sm text-blue-600 hover:underline dark:text-blue-500"
-          >
-            Esqueci a senha
-          </a>
+          <div className="flex justify-around gap-1">
+            <Link
+              to="/cadastro"
+              className="self-end text-sm text-blue-600 hover:underline dark:text-blue-500"
+            >
+              Cadastrar-se
+            </Link>
+            <Link
+              to="/cadastro"
+              className="self-end text-sm text-blue-600 hover:underline dark:text-blue-500"
+            >
+              Esqueci a senha
+            </Link>
+          </div>
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -129,6 +137,7 @@ const LoginPage = () => {
         </p>
 
         <a
+          target="_blank"
           href="https://br.linkedin.com/in/artur-rochel-950361184"
           className="w-full max-w-xs justify-center justify-self-center align-middle"
         >

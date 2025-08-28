@@ -73,7 +73,7 @@ Retorna um objeto contendo o token JWT e os dados do usuário recém-criado (sem
 Autentica um usuário existente e retorna um token de acesso.
 
 - **Método:** `POST`
-- **Endpoint:** `/api/auth/login` _(Assumindo que `logar` está no `routes/auth.js`)_
+- **Endpoint:** `/api/auth/login`
 
 ---
 
@@ -169,7 +169,7 @@ Retorna um array de objetos de usuário.
 
 Atualiza as informações de um usuário específico, identificado pelo seu login.
 
-- **Método:** `PUT` ou `PATCH`
+- **Método:** `PUT`
 - **Endpoint:** `/api/usuarios/:login`
 
 ---

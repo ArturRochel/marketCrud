@@ -1,5 +1,3 @@
-import React from "react";
-
 const Header = () => {
   return (
     <header className="bg-slate-800 p-4 text-white shadow-md">
@@ -13,6 +11,7 @@ const Header = () => {
               Depois, podemos trocar por um ícone de verdade. */}
           <button className="rounded-md p-2 hover:bg-slate-700">Menu</button>
         </div>
+        <h1>TESTE</h1>
       </div>
     </header>
   );
