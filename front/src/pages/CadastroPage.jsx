@@ -20,6 +20,7 @@ const CadastroPage = () => {
     try {
       const responseData = await registerUser(data);
       console.log(responseData);
+      navigate("/dashboard");
     } catch (error) {
       toast.error(error.message);
       reset();

@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
-  const estaAutenticado = false;
+  const estaAutenticado = true;
   if (!estaAutenticado) {
     return <Navigate to="/" />;
   }

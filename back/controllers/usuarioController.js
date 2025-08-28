@@ -64,9 +64,17 @@ const cadastrarUsuario = async (request, response) => {
         sobrenome,
       });
 
-      const usuarioObj = usuarioCriado.toJSON();
-      delete usuarioObj.senha;
-      return response.status(201).json(usuarioObj);
+      const chaveAPI = process.env.JWT_SECRET;
+      const token = jwt.sign({ id: usuarioCriado._id }, chaveAPI, {
+        expiresIn: "2h",
+      });
+
+      const usuario = usuarioCriado.toJSON();
+
+      delete usuario.senha;
+      delete usuario.__v;
+
+      return response.status(201).json({ token, usuario });
     } else {
       return response.status(409).json({ message: "Usuário já cadastrado" });
     }
