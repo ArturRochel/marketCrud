@@ -1,4 +1,4 @@
-import { Menu, X, Package, User, ChevronRight } from "lucide-react";
+import { Menu, X, Package, User } from "lucide-react";
 import NavItemSide from "./NavItemSide";
 import { Link } from "react-router-dom";
 
@@ -53,8 +53,8 @@ const Sidebar = ({ isOpen, onToggle }) => {
         {/* Navigation */}
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
-            {menuItems.map((item) => (
-              <NavItemSide item={item} />
+            {menuItems.map((item, index) => (
+              <NavItemSide item={item} key={index} />
             ))}
           </ul>
         </nav>
