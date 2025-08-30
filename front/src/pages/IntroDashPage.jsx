@@ -1,19 +1,31 @@
 import { icons, Package } from "lucide-react";
 import CardDash from "../components/CardDash";
+import { estatisticaProdutos } from "../services/produtoService";
+import { useQuery } from "@tanstack/react-query";
 
 const IntroDashPage = () => {
-  const cards = [
-    {
-      icone: Package,
-      texto: "Produtos Cadastrados",
-      numero: 1132,
-    },
-  ];
+  const {
+    data: quantidadeProdutos,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["quantidadeProdutos"],
+    queryFn: estatisticaProdutos,
+  });
+
+  if (isLoading) {
+    return <span>Carregando estatísticas...</span>;
+  }
+
+  if (isError) {
+    return <span>Erro ao buscar estatísticas: {error.message}</span>;
+  }
 
   const item = {
     icone: Package,
     texto: "Produtos Cadastrados",
-    numero: 1223,
+    numero: quantidadeProdutos.totalProdutos,
   };
   return (
     <div>

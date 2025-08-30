@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const produtoController = require("../controllers/produtoController.js");
+const estatisticasController = require("../controllers/estatisticasController");
 const routes = Router();
 
 // Rota para listar produtos
@@ -16,5 +17,8 @@ routes.put("/editar/:nome", produtoController.atualizarProduto);
 
 // Rota para excluir produto
 routes.delete("/excluir/:nome", produtoController.deletarProduto);
+
+// Rota para exibir estatísticas de produtos - Quantidade de produtos
+routes.get("/estatisticas", estatisticasController.quantidadeProdutos);
 
 module.exports = routes;
