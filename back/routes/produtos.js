@@ -13,10 +13,10 @@ routes.get("/busca", produtoController.buscarProduto);
 routes.post("/", produtoController.adicionarProduto);
 
 // Rota para atualizar produto
-routes.put("/editar/:nome", produtoController.atualizarProduto);
+routes.put("/:nome", produtoController.atualizarProduto);
 
 // Rota para excluir produto
-routes.delete("/excluir/:nome", produtoController.deletarProduto);
+routes.delete("/:nome", produtoController.deletarProduto);
 
 // Rota para exibir estatísticas de produtos - Quantidade de produtos
 routes.get("/estatisticas", estatisticasController.quantidadeProdutos);

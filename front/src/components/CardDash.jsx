@@ -8,7 +8,7 @@ const CardDash = ({ item }) => {
             "rounded bg-green-400/10 px-2 py-1 text-sm font-medium text-green-400"
           }
         >
-          Quantidade
+          Atualizado
         </span>
       </div>
       <p className="mb-1 text-2xl font-bold text-white">{item.numero}</p>

@@ -18,19 +18,39 @@ const estruturaProduto = new mongoose.Schema(
         message: "O preço deve ser um número válido.",
       },
     },
-    precoVenda: {
+    vendaUnid: {
       type: Number,
-      required: [true, "O preço de venda é obrigatório."],
+      required: [true, "O preço de venda unitário é obrigatório."],
       min: [0, "O preço não pode ser negativo"],
       validate: {
         validator: Number.isFinite,
         message: "O preço deve ser um número válido.",
       },
     },
+    vendaAtac: {
+      type: Number,
+      required: [true, "O preço de venda no atacado é obrigatório."],
+      min: [0, "O preço não pode ser negativo"],
+      validate: {
+        validator: Number.isFinite,
+        message: "O preço deve ser um número válido.",
+      },
+    },
+    label: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     descricao: {
       type: String,
       required: false,
       trim: true,
+    },
+    variacoes: {
+      type: [String],
+      required: false,
+      trim: true,
+      default: [],
     },
   },
   {

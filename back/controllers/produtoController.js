@@ -17,6 +17,7 @@ const listarProdutos = async (request, response) => {
   }
 };
 
+// Buscar produto específico pelo nome
 const buscarProduto = async (request, response) => {
   try {
     const { nome } = request.query;
@@ -37,14 +38,26 @@ const buscarProduto = async (request, response) => {
   }
 };
 
+// Cadastrar produto
 const adicionarProduto = async (request, response) => {
   try {
-    const { nome, precoCompra, precoVenda, descricao } = request.body;
+    const {
+      nome,
+      precoCompra,
+      vendaUnid,
+      vendaAtac,
+      descricao,
+      label,
+      variacoes,
+    } = request.body;
     const produtoAdicionado = await Produto.create({
       nome,
       precoCompra,
-      precoVenda,
+      vendaUnid,
+      vendaAtac,
       descricao,
+      label,
+      variacoes,
     });
 
     return response.status(201).json(produtoAdicionado);
@@ -54,6 +67,7 @@ const adicionarProduto = async (request, response) => {
   }
 };
 
+// Controller para excluir produto
 const deletarProduto = async (request, response) => {
   try {
     const nomeProduto = request.params.nome;
@@ -72,38 +86,42 @@ const deletarProduto = async (request, response) => {
   }
 };
 
+// Controller para editar/atualizar produtos
 const atualizarProduto = async (request, response) => {
   try {
     const nomeBuscado = request.params.nome;
-    const permissoes = ["nome", "precoCompra", "precoVenda", "descricao"];
-    const dadosAtualizados = {};
+    const produto = await Produto.findOne({
+      nome: { $regex: `^${nomeBuscado}$`, $options: "i" },
+    });
+
+    if (!produto) {
+      return response
+        .status(404)
+        .json({ message: `${nomeBuscado} não encontrado` });
+    }
+
+    const permissoes = [
+      "nome",
+      "precoCompra",
+      "vendaUnid",
+      "vendaAtac",
+      "descricao",
+      "label",
+      "variacoes",
+    ];
 
     permissoes.forEach((chave) => {
       const valor = request.body[chave];
 
       if (valor !== undefined) {
-        dadosAtualizados[chave] = valor;
+        produto[chave] = valor;
       }
     });
 
-    const { nome, precoCompra, precoVenda, descricao } = request.body;
-    const produtoEditado = await Produto.findOneAndUpdate(
-      {
-        nome: { $regex: "^" + nomeBuscado + "$", $options: "i" },
-      },
-      dadosAtualizados,
-      {
-        new: true,
-      }
-    );
-
-    if (produtoEditado !== null) {
-      return response.status(200).json(produtoEditado);
-    } else {
-      return response
-        .status(404)
-        .json({ message: `${nomeBuscado} não encontrado` });
-    }
+    const produtoEditado = await produto.save();
+    const produtoObj = produtoEditado.toJSON();
+    delete produtoObj.__v;
+    return response.status(200).json(produtoObj);
   } catch (error) {
     console.log(`ErroEdição: ${error}`);
     return response.status(500).json({ message: "Erro na edição de produto" });

@@ -25,6 +25,7 @@ Este projeto é dividido em duas partes principais: o front-end e o back-end.
 - **[Zustand](https://zustand-demo.pmnd.rs/)**: Para gerenciamento de estado global.
 - **[Axios](https://axios-http.com/)**: Para realizar requisições à API.
 - **[React Hook Form](https://react-hook-form.com/)**: Para gerenciamento de formulários.
+- **[TanStack Query](https://tanstack.com/query/latest/)**: Para gerenciamento de estado global e de servidor.
 
 ### Back-end
 

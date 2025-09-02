@@ -2,6 +2,7 @@ import { icons, Package } from "lucide-react";
 import CardDash from "../components/CardDash";
 import { estatisticaProdutos } from "../services/produtoService";
 import { useQuery } from "@tanstack/react-query";
+import CadastroProduto from "../components/CadastroProduto.jsx";
 
 const IntroDashPage = () => {
   const {
