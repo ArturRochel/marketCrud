@@ -9,7 +9,7 @@ routes.get("/", produtoController.listarProdutos);
 // Rota para buscar pelo nome
 routes.get("/busca", produtoController.buscarProduto);
 
-// Rota para adicionar produtos
+// Rota para cadastrar produtos
 routes.post("/", produtoController.adicionarProduto);
 
 // Rota para atualizar produto

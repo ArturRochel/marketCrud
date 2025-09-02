@@ -1,5 +1,7 @@
 import { Package, Plus, Minus } from "lucide-react";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { cadastrarProduto } from "../services/produtoService";
+import toast from "react-hot-toast";
 
 const ProductRegistrationForm = () => {
   const {
@@ -19,9 +21,26 @@ const ProductRegistrationForm = () => {
     name: "variacoes",
   });
 
+  const addVariacao = () => {
+    append({ value: "" });
+  };
+
   const onSubmit = async (data) => {
     try {
-    } catch (error) {}
+      const arraySimples = data.variacoes.map((variacao) => variacao.value);
+      const novoDado = {
+        ...data,
+        variacoes: arraySimples,
+      };
+      const responseData = await cadastrarProduto(novoDado);
+      console.log(responseData);
+      reset();
+      toast.success("Novo produto cadastrado");
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao cadastrar produto");
+      throw error;
+    }
   };
 
   return (
@@ -155,10 +174,12 @@ const ProductRegistrationForm = () => {
                   />
                   {fields.length > 1 && (
                     <button
+                      onClick={() => remove(index)}
                       type="button"
                       className="rounded-lg bg-red-600 px-3 py-3 text-white transition-colors hover:bg-red-700"
                     >
                       <Minus className="h-4 w-4" />
+                      Remover Variação
                     </button>
                   )}
                 </div>

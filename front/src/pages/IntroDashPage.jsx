@@ -35,6 +35,7 @@ const IntroDashPage = () => {
       <div className="flex">
         <CardDash item={item} />
       </div>
+      <CadastroProduto />
     </div>
   );
 };
