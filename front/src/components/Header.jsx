@@ -1,17 +1,15 @@
-const Header = () => {
+import { Menu, X } from "lucide-react";
+const Header = ({ isOpen, onToggle }) => {
   return (
-    <header className="bg-slate-800 p-4 text-white shadow-md">
-      <div className="container mx-auto flex items-center justify-between">
-        {/* Lado Esquerdo: Título */}
+    <header className="bg-slate-800 p-4 text-white shadow-md md:hidden">
+      <div className="container mx-auto flex items-center gap-4">
+        <button
+          onClick={onToggle}
+          className="rounded-lg border border-slate-700/50 bg-slate-800/80 p-2 text-white backdrop-blur-sm transition-all duration-200 hover:bg-slate-700/80 lg:hidden"
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
         <h1 className="text-xl font-bold">MarketCrud</h1>
-
-        {/* Lado Direito: Botão de Menu para Mobile */}
-        <div className="md:hidden">
-          {/* Por enquanto, é só um botão com texto. 
-              Depois, podemos trocar por um ícone de verdade. */}
-          <button className="rounded-md p-2 hover:bg-slate-700">Menu</button>
-        </div>
-        <h1>TESTE</h1>
       </div>
     </header>
   );

@@ -26,7 +26,7 @@ const IntroDashPage = () => {
   const item = {
     icone: Package,
     texto: "Produtos Cadastrados",
-    numero: quantidadeProdutos.totalProdutos,
+    numero: quantidadeProdutos.totalProdutos || 5,
   };
   return (
     <div>

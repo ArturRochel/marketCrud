@@ -1,4 +1,4 @@
-import { Menu, X, Package, User } from "lucide-react";
+import { Package, User } from "lucide-react";
 import NavItemSide from "./NavItemSide";
 import { Link } from "react-router-dom";
 
@@ -7,25 +7,17 @@ const Sidebar = ({ isOpen, onToggle }) => {
     {
       icon: Package,
       label: "Produtos",
-      href: "produtos",
+      href: "/dashboard/produtos",
     },
     {
       icon: User,
       label: "Perfil",
-      href: "perfil",
+      href: "/dashboard/perfil",
     },
   ];
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={onToggle}
-        className="fixed top-4 left-4 z-50 rounded-lg border border-slate-700/50 bg-slate-800/80 p-2 text-white backdrop-blur-sm transition-all duration-200 hover:bg-slate-700/80 lg:hidden"
-      >
-        {isOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
-
       {/* Mobile Overlay */}
       {isOpen && (
         <div
