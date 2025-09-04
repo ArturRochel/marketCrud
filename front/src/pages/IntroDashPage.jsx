@@ -26,12 +26,10 @@ const IntroDashPage = () => {
   const item = {
     icone: Package,
     texto: "Produtos Cadastrados",
-    numero: quantidadeProdutos.totalProdutos || 5,
+    numero: quantidadeProdutos?.totalProdutos || 5,
   };
   return (
     <div>
-      <h1 className="text-2xl font-bold">Introdução Dashboard</h1>
-      <p>Estatísticas e informações sobre produtos</p>
       <div className="flex">
         <CardDash item={item} />
       </div>

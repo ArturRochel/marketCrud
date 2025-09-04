@@ -32,7 +32,11 @@ const Sidebar = ({ isOpen, onToggle }) => {
       >
         {/* Header */}
         <div className="border-b border-slate-700/50 p-6">
-          <Link className="border-b border-slate-700/50" to="/dashboard">
+          <Link
+            className="border-b border-slate-700/50"
+            to="/dashboard"
+            onClick={onToggle}
+          >
             <h2 className="text-xl font-bold text-white">
               Market<span className="text-blue-400">Crud</span>
             </h2>
@@ -46,7 +50,7 @@ const Sidebar = ({ isOpen, onToggle }) => {
         <nav className="flex-1 p-4">
           <ul className="space-y-2">
             {menuItems.map((item, index) => (
-              <NavItemSide item={item} key={index} />
+              <NavItemSide item={item} key={index} onToggle={onToggle} />
             ))}
           </ul>
         </nav>

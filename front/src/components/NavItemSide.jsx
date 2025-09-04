@@ -1,13 +1,14 @@
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
-const NavItemSide = ({ item }) => {
+const NavItemSide = ({ item, key, onToggle }) => {
   return (
     <div>
-      <li key={item.label}>
+      <li key={key}>
         <Link
           to={item.href}
           className="group flex items-center justify-between rounded-lg p-3 text-slate-300 transition-all duration-200 hover:bg-slate-700/50 hover:text-white"
+          onClick={onToggle}
         >
           <div className="flex items-center space-x-3">
             <item.icon
