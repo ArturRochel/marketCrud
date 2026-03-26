@@ -8,8 +8,6 @@ const ProdutoCard = ({ produto }) => {
     }).format(preco);
   };
 
-  console.log(produto);
-
   const lucroUnid = produto.vendaUnid - produto.precoCompra;
   const lucroAtac = produto.vendaAtac - produto.precoCompra;
   const margemUnid = (lucroUnid / produto.vendaUnid) * 100;
